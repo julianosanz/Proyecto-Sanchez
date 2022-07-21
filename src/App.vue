@@ -1,210 +1,145 @@
 <template>
   <div class="container" id="app">
-    <div class="row">
+    <navBar></navBar>
+    <LoginPage v-if="!canAccess" @changeFlag="recibiElMensaje" :usuarios="listadoDeUsuarios"/>
+    <PaginaLista v-if="canAccess" @changeFlagFromMain="recibiElMensaje" :productos="listadoDeProductos" @emitVerDetalles="recibirVerDetalle" />
+    <Carrito :carro="carrito" @emiActualizarCarritoPrincipal="recibirActualizarAlCarrito" />
+    <Detail v-if="seleccionado" :producto="seleccionado"/>
 
-            <div class="col-4 col-md-4 offset-4 text-center">
-                <h1 class="main-title">Cartelera</h1>
-            </div>
-
-        </div>    
-        
-        <div class="col-4 col-md-4 offset-4 text-center">
-            <h2 class="main-title">Infantiles</h2>
-            <desafio 
-                :peliculas="infantiles" 
-                :estilosnuevo="estiloInfantil"
-                >
-            </desafio>
-        </div>
-
-        <div class="col-4 col-md-4 offset-4 text-center">
-            <h2 class="main-title">Todo publico</h2>
-            <desafio :peliculas="todoPublico" :estilosnuevo="estiloTodo"></desafio>
-        </div>
-
-        <div class="col-4 col-md-4 offset-4 text-center">
-            <h2 class="main-title">18+</h2>
-            <desafio :peliculas="maYores" :estilosnuevo="estilo18"></desafio>
-        </div>
+    <Registro v-if="!canAccess" @EnviarRegistro="recibirRegistro" @emitAgregarCarrito="recibirAgregarCarrito"></Registro>
   </div>
 </template>
 
 <script>
-import desafio from './components/desafio.vue'
+import navBar from './components/navbar/indexNav.vue'
+
+import LoginPage from './components/Login.vue'
+import Registro from './components/Registro.vue'
+
+import PaginaLista from './components/PaginaLista.vue'
+import Carrito from './components/Carrito.vue'
+import Detail from './components/Detail.vue'
 
 export default {
   name: 'App',
   components: {
-    desafio
-  },
+    LoginPage,
+    PaginaLista,
+    navBar,
+    Registro,
+    Carrito,
+    Detail
+},
   data(){
     return {
-      canAccess: true,
-      infantiles: [
-                {
-                
-                id: 1,
-                
-                titulo: "Cars",
-                
-                year: "2006",
-                
-                categoria: "Animacion / Comedia",
+      canAccess: false,
+      listadoDeUsuarios: [],
+      listadoDeProductos: 
+        [{
+  id: 1,
+  titulo: "Volkswagen",
+  descripcion: "Passat",
+  cantidad: 0,
+  precio: "$2.20",
+  image: "https://robohash.org/nonetdolorem.png?size=50x50&set=set1"
+}, {
+  id: 0,
+  titulo: "Subaru",
+  descripcion: "Leone",
+  cantidad: 0,
+  precio: "$5.17",
+  image: "https://robohash.org/voluptasdoloresvoluptate.png?size=50x50&set=set1"
+}, {
+  id: 3,
+  titulo: "Saab",
+  descripcion: "900",
+  cantidad: 0,
+  precio: "$3.83",
+  image: "https://robohash.org/animiminimatempore.png?size=50x50&set=set1"
+}, {
+  id: 4,
+  titulo: "Buick",
+  descripcion: "LaCrosse",
+  cantidad: 0,
+  precio: "$3.21",
+  image: "https://robohash.org/praesentiumeligendiex.png?size=50x50&set=set1"
+}, {
+  id: 5,
+  titulo: "Mazda",
+  descripcion: "MX-3",
+  cantidad: 0,
+  precio: "$3.08",
+  image: "https://robohash.org/sittemporeet.png?size=50x50&set=set1"
+}, {
+  id: 6,
+  titulo: "Chrysler",
+  descripcion: "Concorde",
+  cantidad: 0,
+  precio: "$4.63",
+  image: "https://robohash.org/quiutaperiam.png?size=50x50&set=set1"
+}, {
+  id: 7,
+  titulo: "Mercury",
+  descripcion: "Mariner",
+  cantidad: 0,
+  precio: "$3.11",
+  image: "https://robohash.org/utvoluptatemfacilis.png?size=50x50&set=set1"
+}, {
+  id: 8,
+  titulo: "Toyota",
+  descripcion: "Camry",
+  cantidad: 0,
+  precio: "$2.34",
+  image: "https://robohash.org/omniserroriste.png?size=50x50&set=set1"
+}, {
+  id: 9,
+  titulo: "Lamborghini",
+  descripcion: "Murciélago",
+  cantidad: 0,
+  precio: "$8.42",
+  image: "https://robohash.org/voluptatesrerumveritatis.png?size=50x50&set=set1"
+}, {
+  id: 10,
+  titulo: "Dodge",
+  descripcion: "Ram Van 3500",
+  cantidad: 0,
+  precio: "$3.19",
+  image: "https://robohash.org/commodiametin.png?size=50x50&set=set1"
+  },
+  ],
+  carrito: [
 
-                duracion: "96 min"
-                
-                },
-                
-                {
-                
-                id: 2,
-                
-                titulo: "Metegol",
-                
-                year: "2013",
-                
-                categoria: "Animacion / Aventura",
+  ],
+  seleccionado: null 
+    };
+  
+  },
+  methods: {
+    recibiElMensaje(){
+      this.canAccess = !this.canAccess
+    },
+    recibirRegistro(payload){
+      this.listado.push(payload)
+    },
+    recibirAgregarCarrito(payload){
+      this.carrito.push(payload)
+    },
+    recibirActualizarAlCarrito(payload)
+    {
+      this.carrito = [...payload]
+      // this.carrito = Object.assign(this.carrito, payload)
+    },
+    recibirVerDetalle(payload)
+    {
+      this.seleccionado = [...payload]
 
-                duracion: "106 min"
-                
-                },
-                
-                {
-                
-                id: 3,
-                
-                titulo: "Mi villano favorito",
-                
-                year: "2010",
-                
-                categoria: "Animacion / Comedia",
-
-                duracion: "95 min"
-                
-                }
-    ],
-
-        todoPublico: [
-            {
-            
-            id: 1,
-            
-            titulo: "Spider-Man",
-            
-            year: "2002",
-            
-            categoria: "Accion / Aventura",
-
-            duracion: "120 min"
-            
-            },
-            
-            {
-            
-            id: 2,
-            
-            titulo: "Karate Kid",
-            
-            year: "1984",
-            
-            categoria: "Animacion / Aventura",
-
-            duracion: "122 min"
-            
-            },
-            
-            {
-            
-            id: 3,
-            
-            titulo: "Juego de gemelas",
-            
-            year: "1998",
-            
-            categoria: "Comedia",
-
-            duracion: "110 min"
-            
-            }
-    ],
-
-        maYores: [
-            {
-            
-            id: 1,
-            
-            titulo: "John Wick 3",
-            
-            year: "2019",
-            
-            categoria: "Accion",
-
-            duracion: "131 min"
-            
-            },
-            
-            {
-            
-            id: 2,
-            
-            titulo: "Proyecto X",
-            
-            year: "2012",
-            
-            categoria: "Comedia",
-
-            duracion: "88 min"
-            
-            },
-            
-            {
-            
-            id: 3,
-            
-            titulo: "Ambulancia",
-            
-            year: "2022",
-            
-            categoria: "Suspenso",
-
-            duracion: "136 min"
-            
-            }
-            
-    ],
-
-    estiloInfantil: 
-        {
-            'border': '1px solid',
-            'background' : '#FF5733',
-            'color': 'white'
-        },
-    estiloTodo: 
-        {
-            'border': '2px solid blue',
-            'background' : '#565F07',
-            'color': '#2EFF00'
-        },
-    estilo18: 
-        {
-            'border': '1px solid red'
-            ,'background' : '#00FFCD',
-            'color': '#FF0000'
-        }
     }
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 .footer {
             position: sticky;
             bottom:0;
