@@ -1,12 +1,20 @@
 <template>
     <div>
       <ul>
-        <li v-for="item in productos" :key="item.id">{{ item.titulo }}
-        <button @click="agregarCarrito">Agregar a Carrito</button>
-        <button @click="verDetalle(item)">Detalle</button>
+        
+        <li class="card" style="width: 18rem;" v-for="item in productos" :key="item.id">
+          {{ item.titulo }}
+          <img class="card-img-top" src= "item.image" alt="Card image cap">
+            <div class="card-body">
+              <p class="card-text">{{ item.descripcion }}</p>
+              <button @click="agregarCarrito">Agregar a Carrito</button>
+              <button @click="verDetalle(item)">Detalle</button>
+            </div>
         </li>
+        
+        
       </ul>
-
+      
 
       <a @click="desLogearse">LogOut</a>
 

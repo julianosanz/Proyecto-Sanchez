@@ -2,7 +2,10 @@
     <div>
       <h1> {{ producto.titulo}}</h1>
       <p><i>{{ producto.descripcion }}</i></p>
-    </div> 
+      
+    </div>
+    
+    
 </template>
 
 <script>
